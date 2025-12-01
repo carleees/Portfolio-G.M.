@@ -1,9 +1,9 @@
 export default function Info() {
   return (
-    <div className="pt-32 px-12 max-w-[1000px] mx-auto pb-24 min-h-screen">
+    <div className="pt-28 md:pt-32 px-6 md:px-12 max-w-[1000px] mx-auto pb-24 min-h-screen">
       <div className="space-y-16">
         <section>
-          <h2 className="text-3xl tracking-[0.2em] font-light mb-8">About</h2>
+          <h2 className="text-2xl md:text-3xl tracking-[0.2em] font-light mb-8">About</h2>
           <div className="space-y-6 text-neutral-600 leading-relaxed">
             <p>
               Galia Mariani is a fashion stylist specializing in editorial, commercial, and personal styling.
@@ -19,7 +19,7 @@ export default function Info() {
         </section>
 
         <section>
-          <h2 className="text-3xl tracking-[0.2em] font-light mb-8">Services</h2>
+          <h2 className="text-2xl md:text-3xl tracking-[0.2em] font-light mb-8">Services</h2>
           <ul className="space-y-4 text-neutral-600">
             <li className="flex items-start gap-4">
               <span className="text-neutral-400 text-xs mt-1">01</span>
@@ -53,7 +53,7 @@ export default function Info() {
         </section>
 
         <section>
-          <h2 className="text-3xl tracking-[0.2em] font-light mb-8">Contact</h2>
+          <h2 className="text-2xl md:text-3xl tracking-[0.2em] font-light mb-8">Contact</h2>
           <div className="space-y-4 text-neutral-600">
             <p>
               <span className="text-neutral-400 text-sm tracking-wider block mb-1">Email</span>
