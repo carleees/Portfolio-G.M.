@@ -13,7 +13,7 @@ function App() {
     window.scrollTo(0, 0);
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+        setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
