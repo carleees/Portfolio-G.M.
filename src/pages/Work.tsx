@@ -20,6 +20,11 @@ export default function Work() {
 
   const loadProjects = async () => {
     try {
+      if (!supabase) {
+        // Si no hay configuración de Supabase, no hacemos llamada remota
+        setProjects([]);
+        return;
+      }
       const { data, error } = await supabase
         .from('projects')
         .select('*')
