@@ -23,8 +23,8 @@ export default function Films() {
 
     return (
         <div className="min-h-screen font-['Arial'] pb-8 md:pb-10">
-            <div className="pt-28 md:pt-32 px-6 md:px-12 max-w-[1600px] mx-auto mb-8 md:mb-12">
-                <div className="mb-1 text-[10px] md:text-[11px] font-normal pl-4">
+            <div className="pt-28 md:pt-32 px-6 md:px-12 max-w-[1600px] mx-auto mb-8 md:mb-12 min-h-screen flex flex-col justify-center">
+                <div className="mb-1 text-[10px] md:text-xs font-normal pl-4">
                     Styling by me
                 </div>
                 <ImageCarousel images={filmImages} speed={1} landscape={true} />

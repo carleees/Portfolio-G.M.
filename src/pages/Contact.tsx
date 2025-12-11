@@ -43,7 +43,7 @@ export default function Contact() {
         </div>
 
         <div className="mt-8 pt-10 md:pt-28 mb-8 md:mb-12">
-          <p className="text-xs text-black text-right font-bold translate-x-[25px]">
+          <p className="text-[10px] md:text-xs text-black text-center md:text-right font-bold md:translate-x-[25px] mt-8 md:mt-0">
             © 2025, Galia Mariani. All Rights Reserved.
           </p>
         </div>

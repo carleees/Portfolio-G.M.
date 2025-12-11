@@ -28,41 +28,45 @@ export default function FashionImageDetail({ item, onBack, onNext, onPrev }: Fas
     }, [onNext, onPrev, onBack]);
 
     return (
-        <div className="fixed inset-0 z-[100] bg-white animate-fadeIn flex flex-col md:flex-row">
+        <div className="fixed inset-0 z-[100] bg-white animate-fadeIn flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
             {/* Back Button */}
             <button
                 onClick={onBack}
-                className="absolute top-6 right-6 md:top-8 md:right-8 text-black hover:opacity-60 transition-opacity z-50 p-2"
+                className="absolute top-4 right-4 md:top-8 md:right-8 text-black hover:opacity-60 transition-opacity z-50 p-2"
                 aria-label="Close detail view"
             >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
 
-            {/* Navigation Arrows (Only on Desktop? Or both?) */}
-            {onPrev && (
-                <button
-                    onClick={onPrev}
-                    className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2 p-4 hover:opacity-60 transition-opacity z-50 text-black text-4xl font-light"
-                    aria-label="Previous image"
-                >
-                    &lt;
-                </button>
-            )}
-            {onNext && (
-                <button
-                    onClick={onNext}
-                    className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2 p-4 hover:opacity-60 transition-opacity z-50 text-black text-4xl font-light"
-                    aria-label="Next image"
-                >
-                    &gt;
-                </button>
-            )}
-
             {/* Image Container */}
-            <div className="flex-1 md:h-full relative flex items-center justify-center p-4 md:p-12 md:pr-0 bg-white">
+            <div className="w-full h-[65vh] shrink-0 md:h-full md:w-auto md:flex-1 relative flex items-center justify-center p-4 md:p-12 md:pr-0 bg-white">
+                {/* Navigation Arrows */}
+                {onPrev && (
+                    <button
+                        onClick={onPrev}
+                        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-2 md:p-4 hover:opacity-60 transition-opacity z-50 text-black"
+                        aria-label="Previous image"
+                    >
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                )}
+                {onNext && (
+                    <button
+                        onClick={onNext}
+                        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-2 md:p-4 hover:opacity-60 transition-opacity z-50 text-black"
+                        aria-label="Next image"
+                    >
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                )}
+
                 <img
                     src={src}
                     alt="Fashion detail"
@@ -72,7 +76,7 @@ export default function FashionImageDetail({ item, onBack, onNext, onPrev }: Fas
 
             {/* Credits Sidebar (Only for FashionItem) */}
             {isObject && (
-                <div className="w-full md:w-[300px] bg-white md:bg-neutral-50 p-6 md:p-12 flex flex-col justify-end md:justify-center border-t md:border-t-0 md:border-l border-neutral-200">
+                <div className="w-full md:w-[300px] shrink-0 bg-white md:bg-neutral-50 p-6 md:p-12 flex flex-col justify-end md:justify-center border-t md:border-t-0 md:border-l border-neutral-200">
                     <div className="space-y-1 text-sm text-black font-normal font-['Arial']">
                         {(item as FashionItem).credits.photographer && (
                             <p>Photographer: {(item as FashionItem).credits.photographer}</p>
