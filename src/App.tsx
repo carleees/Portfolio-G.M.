@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Fashion from './pages/Fashion';
 import Films from './pages/Films';
-import Info from './pages/Info';
+import Contact from './pages/Contact';
 import FashionImageDetail from './pages/FashionImageDetail';
 import Navigation from './components/Navigation';
 
@@ -10,7 +10,7 @@ import { FashionItem } from './lib/types';
 import { fashionImages } from './lib/data';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'fashion' | 'films' | 'info'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'fashion' | 'films' | 'contact'>('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | FashionItem | null>(null);
 
@@ -59,7 +59,7 @@ function App() {
       {currentPage === 'home' && <Home />}
       {currentPage === 'fashion' && <Fashion onImageClick={setSelectedImage} />}
       {currentPage === 'films' && <Films />}
-      {currentPage === 'info' && <Info />}
+      {currentPage === 'contact' && <Contact />}
     </div>
   );
 }

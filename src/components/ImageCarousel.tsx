@@ -6,9 +6,10 @@ interface ImageCarouselProps {
   items?: FashionItem[]; // New support for FashionItem objects
   onImageClick?: (item: string | FashionItem) => void;
   speed?: number;
+  landscape?: boolean;
 }
 
-export default function ImageCarousel({ images, items, onImageClick, speed = 0.5 }: ImageCarouselProps) {
+export default function ImageCarousel({ images, items, onImageClick, speed = 0.5, landscape = false }: ImageCarouselProps) {
   // Normalize data to array of items or strings
   const data = items || images || [];
 
@@ -170,10 +171,10 @@ export default function ImageCarousel({ images, items, onImageClick, speed = 0.5
             <div
               key={index}
               onClick={() => handleItemClick(item)}
-              className={`w-[200px] md:w-[300px] flex-shrink-0 mx-4 select-none flex flex-col gap-4 group cursor-pointer`}
+              className={`${landscape ? 'w-[90vw] md:w-[675px]' : 'w-[85vw] md:w-[300px]'} flex-shrink-0 mx-4 select-none flex flex-col gap-4 group cursor-pointer`}
               draggable={false}
             >
-              <div className={`w-full h-[300px] md:h-[450px] overflow-hidden transition-all duration-300 bg-white ${isGrabbing ? '' : 'group-hover:shadow-2xl group-hover:scale-[1.02]'}`}>
+              <div className={`w-full h-[60vh] md:h-[450px] overflow-hidden transition-all duration-300 bg-white ${isGrabbing ? '' : 'group-hover:shadow-2xl group-hover:scale-[1.02]'}`}>
                 <img
                   src={src}
                   alt={`Slide ${index}`}
