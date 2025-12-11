@@ -23,8 +23,11 @@ export default function Films() {
 
     return (
         <div className="pt-28 md:pt-32 px-6 md:px-12 max-w-[1600px] mx-auto pb-8 md:pb-10 min-h-screen font-['Arial']">
+            <div className="mb-1 text-[10px] md:text-[11px] font-normal pl-4">
+                Styling by me
+            </div>
             <div className="mb-16 md:mb-24">
-                <ImageCarousel images={filmImages} />
+                <ImageCarousel images={filmImages} speed={1} />
             </div>
             <div className="mt-6">
                 <BottomTicker />

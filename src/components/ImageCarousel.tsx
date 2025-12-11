@@ -1,13 +1,19 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
+import { FashionItem } from '../lib/types';
 
 interface ImageCarouselProps {
-  images: string[];
-  onImageClick?: (src: string) => void;
+  images?: string[]; // Legacy support for string array
+  items?: FashionItem[]; // New support for FashionItem objects
+  onImageClick?: (item: string | FashionItem) => void;
+  speed?: number;
 }
 
-export default function ImageCarousel({ images, onImageClick }: ImageCarouselProps) {
-  // Quadrupling the images array to ensure absolutely seamless looping
-  const duplicatedImages = [...images, ...images, ...images, ...images];
+export default function ImageCarousel({ images, items, onImageClick, speed = 0.5 }: ImageCarouselProps) {
+  // Normalize data to array of items or strings
+  const data = items || images || [];
+
+  // Quadrupling the array to ensure absolutely seamless looping
+  const duplicatedData = [...data, ...data, ...data, ...data];
 
   const containerRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>();
@@ -19,8 +25,12 @@ export default function ImageCarousel({ images, onImageClick }: ImageCarouselPro
 
   const widthRef = useRef(0);
 
+  const isHoveringRef = useRef(false);
+
   // State for cursor style
   const [isGrabbing, setIsGrabbing] = useState(false);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Calculate the width of one set of images
   const calculateWidth = useCallback(() => {
@@ -28,6 +38,24 @@ export default function ImageCarousel({ images, onImageClick }: ImageCarouselPro
       // Calculate the width of one full set of images (1/4 of the total scrollWidth)
       widthRef.current = containerRef.current.scrollWidth / 4;
     }
+  }, []);
+
+  // Handle Touchpad/Wheel scrolling
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Check if the scroll is primarily horizontal
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        positionRef.current -= e.deltaX;
+      }
+    };
+
+    // Add non-passive listener to prevent browser navigation gestures
+    wrapper.addEventListener('wheel', handleWheel, { passive: false });
+    return () => wrapper.removeEventListener('wheel', handleWheel);
   }, []);
 
   useEffect(() => {
@@ -49,8 +77,9 @@ export default function ImageCarousel({ images, onImageClick }: ImageCarouselPro
     // Only animate if we have a valid width
     if (singleSetWidth > 0) {
       if (!isDraggingRef.current) {
-        // Auto-scroll speed
-        positionRef.current -= 0.5;
+        // Auto-scroll speed (half speed when hovering)
+        const currentSpeed = isHoveringRef.current ? speed * 0.5 : speed;
+        positionRef.current -= currentSpeed;
       }
 
       // Seamless loop logic
@@ -69,7 +98,7 @@ export default function ImageCarousel({ images, onImageClick }: ImageCarouselPro
     }
 
     requestRef.current = requestAnimationFrame(animate);
-  }, [calculateWidth]);
+  }, [calculateWidth, speed]);
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
@@ -110,38 +139,61 @@ export default function ImageCarousel({ images, onImageClick }: ImageCarouselPro
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
   };
 
-  const handleImageClick = (src: string) => {
+  const handleItemClick = (item: string | FashionItem) => {
     if (isClickRef.current && onImageClick) {
-      onImageClick(src);
+      onImageClick(item);
     }
   };
 
   return (
-    <div className="w-full overflow-hidden bg-neutral-50 py-12 touch-none">
+    <div
+      ref={wrapperRef}
+      className="w-full overflow-hidden bg-neutral-50 pt-4 pb-12 touch-none"
+      onMouseEnter={() => { isHoveringRef.current = true; }}
+      onMouseLeave={() => { isHoveringRef.current = false; }}
+      style={{ touchAction: 'pan-y' }} // Allow vertical scroll, but we handle horiz? Actually 'none' or 'pan-y'.
+    >
       <div
         ref={containerRef}
-        className="flex w-max whitespace-nowrap will-change-transform"
+        className="flex w-max whitespace-nowrap will-change-transform items-start"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         style={{ cursor: isGrabbing ? 'grabbing' : 'grab' }}
       >
-        {duplicatedImages.map((src, index) => (
-          <div
-            key={index}
-            onClick={() => handleImageClick(src)}
-            className={`w-[200px] h-[300px] md:w-[300px] md:h-[450px] flex-shrink-0 mx-4 overflow-hidden transition-all duration-300 bg-white select-none ${isGrabbing ? '' : 'hover:scale-[1.02] hover:shadow-2xl'}`}
-            draggable={false}
-          >
-            <img
-              src={src}
-              alt={`Slide ${index}`}
-              className="w-full h-full object-cover pointer-events-none"
-              loading="eager"
-            />
-          </div>
-        ))}
+        {duplicatedData.map((item, index) => {
+          const src = typeof item === 'string' ? item : item.src;
+          const isObject = typeof item !== 'string';
+
+          return (
+            <div
+              key={index}
+              onClick={() => handleItemClick(item)}
+              className={`w-[200px] md:w-[300px] flex-shrink-0 mx-4 select-none flex flex-col gap-4 group cursor-pointer`}
+              draggable={false}
+            >
+              <div className={`w-full h-[300px] md:h-[450px] overflow-hidden transition-all duration-300 bg-white ${isGrabbing ? '' : 'group-hover:shadow-2xl group-hover:scale-[1.02]'}`}>
+                <img
+                  src={src}
+                  alt={`Slide ${index}`}
+                  className="w-full h-full object-cover pointer-events-none"
+                  loading="eager"
+                />
+              </div>
+
+              {/* Credits Section - Only visible if item is FashionItem */}
+              {isObject && (
+                <div className="text-[10px] md:text-[11px] leading-snug text-black font-normal mt-2 pointer-events-none font-['Arial']">
+                  {(item as FashionItem).credits.photographer && <p>Photographer: {(item as FashionItem).credits.photographer}</p>}
+                  {(item as FashionItem).credits.stylist && <p>Stylist: {(item as FashionItem).credits.stylist}</p>}
+                  {(item as FashionItem).credits.mua && <p>Mua: {(item as FashionItem).credits.mua}</p>}
+                  {(item as FashionItem).credits.model && <p>Model: {(item as FashionItem).credits.model}</p>}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

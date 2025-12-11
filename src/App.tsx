@@ -6,10 +6,13 @@ import Info from './pages/Info';
 import FashionImageDetail from './pages/FashionImageDetail';
 import Navigation from './components/Navigation';
 
+import { FashionItem } from './lib/types';
+import { fashionImages } from './lib/data';
+
 function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'fashion' | 'films' | 'info'>('home');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | FashionItem | null>(null);
 
   useEffect(() => {
     setIsScrolled(false);
@@ -23,8 +26,31 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentPage]);
 
+  const handleNext = () => {
+    if (!selectedImage || typeof selectedImage === 'string') return;
+    const currentIndex = fashionImages.findIndex(img => img.id === selectedImage.id);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + 1) % fashionImages.length;
+    setSelectedImage(fashionImages[nextIndex]);
+  };
+
+  const handlePrev = () => {
+    if (!selectedImage || typeof selectedImage === 'string') return;
+    const currentIndex = fashionImages.findIndex(img => img.id === selectedImage.id);
+    if (currentIndex === -1) return;
+    const prevIndex = (currentIndex - 1 + fashionImages.length) % fashionImages.length;
+    setSelectedImage(fashionImages[prevIndex]);
+  };
+
   if (selectedImage) {
-    return <FashionImageDetail imageSrc={selectedImage} onBack={() => setSelectedImage(null)} />;
+    return (
+      <FashionImageDetail
+        item={selectedImage}
+        onBack={() => setSelectedImage(null)}
+        onNext={typeof selectedImage !== 'string' ? handleNext : undefined}
+        onPrev={typeof selectedImage !== 'string' ? handlePrev : undefined}
+      />
+    );
   }
 
   return (

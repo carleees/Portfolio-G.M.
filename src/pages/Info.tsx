@@ -2,7 +2,7 @@ import BottomTicker from '../components/BottomTicker';
 
 export default function Info() {
   return (
-    <div className="pt-28 md:pt-32 px-6 md:px-12 max-w-[1000px] mx-auto pb-24 min-h-screen flex flex-col font-['Arial']">
+    <div className="relative pt-28 md:pt-32 px-6 md:px-12 max-w-[1000px] mx-auto pb-24 min-h-screen flex flex-col font-['Arial']">
       <div className="space-y-16">
 
         <section>
@@ -29,12 +29,28 @@ export default function Info() {
           </div>
         </section>
       </div>
+
+      {/* Video Positioned Absolutely on Desktop to preserve layout */}
+      <div className="mt-8 md:mt-0 md:absolute md:top-40 w-full md:w-[300px] aspect-square overflow-hidden bg-neutral-50 shadow-sm translate-y-[-25px]" style={{ right: '150px' }}>
+        <video
+          src="/images/info%20vid/copy_CBEDFBD0-458F-4376-9D8C-50FF3DF6B7B9.MOV"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       <br />
       <br />
       <br />
-      <p className="text-xs text-black mt-auto text-right font-bold">
-        © 2025, Galia Mariani. All Rights Reserved.
-      </p>
+
+      <div className="mt-8 pt-10 md:pt-28">
+        <p className="text-xs text-black text-right font-bold translate-x-[25px]">
+          © 2025, Galia Mariani. All Rights Reserved.
+        </p>
+      </div>
       <br />
       <br />
       <br />
